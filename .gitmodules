@@ -1,0 +1,3 @@
+[submodule "vendor/pixelmixer"]
+	path = vendor/pixelmixer
+	url = https://github.com/audiopixel/pixelmixer.git

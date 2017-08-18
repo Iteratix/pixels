@@ -1,0 +1,4 @@
+eventlet
+Flask
+python-socketio
+pyserial
