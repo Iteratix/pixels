@@ -9,21 +9,46 @@
 
 		<!-- Import standard three.js stuff -->
 		<script src="libs/Detector.js"></script>
+		<script src="libs/stats.min.js"></script>
+		<script src="libs/dat.gui.min.js"></script>
 		<script src="libs/three.min.js"></script>
 		<script src="libs/TrackballControls.js"></script>
-
 
 		<!-- Import library -->
 		<script src="libs/pixelmixer.min.js"></script>
 
-
-		<!-- Import Shaders -->
-		<script src="import/shaders/SimpleSwirl.js"></script>
-
+		<script src="import/ui/datGuiPresets.js"></script>
+		<script src="import/ui/datguiSetup1.js"></script>
+		<script src="import/ui/utils.js"></script>
 
 		<!-- Import a 'Broadcast Tech' to define how to use the RGB values -->
     <script src="/vendor/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io('127.0.0.1:9000/chat');
+    </script>
 		<script src="import/techs/testBroadcast.js"></script>
+
+
+
+		<!-- Import Shaders -->
+		<script src="import/shaders/SolidColor.js"></script>
+		<script src="import/shaders/TestFrame.js"></script>
+		<script src="import/shaders/DiSinSwirl.js"></script>
+		<script src="import/shaders/ColorSineBar.js"></script>
+		<script src="import/shaders/ColorSwirls.js"></script>
+		<script src="import/shaders/LineCosSin.js"></script>
+		<script src="import/shaders/SimpleSwirl.js"></script>
+		<script src="import/shaders/SinSpiral.js"></script>
+		<script src="import/shaders/SineParticles.js"></script>
+		<script src="import/shaders/Water.js"></script>
+		<script src="import/shaders/HexifyRadial.js"></script>
+		<script src="import/shaders/SinCosTan.js"></script>
+		<script src="import/shaders/HueFx.js"></script>
+		<script src="import/shaders/TestFx.js"></script>
+		<script src="import/shaders/BasicTest.js"></script>
+		<script src="import/techs/testBroadcast.js"></script>
+
+
 
 		<script>
 
@@ -71,6 +96,20 @@
 
 					// ----------------
 
+					// Init UI, using dat.gui for now defined in "ui/datguiSetup1.js"
+					initUi();
+
+
+					// ----------------
+
+
+					// Display stats
+					stats = new Stats();
+					stats.domElement.style.position = 'absolute';
+					stats.domElement.style.top = '0px';
+					document.getElementById( 'container' ).appendChild( stats.domElement );
+					// ----------------
+
 
 					// ** Add a simple grid of Nodes 
 
@@ -78,7 +117,7 @@
 					params.x = 0;		
 					params.y = 0;
 					params.z = 0;
-					params.width = 8;		// How many pixels for the entire grid
+					params.width = 8*5;		// How many pixels for the entire grid
 					params.height = 1;
 					params.pitch = 33;		// How far each pixel is spaced
 
@@ -105,7 +144,7 @@
 
 					// ** Add a shader to Channel 1
 
-					PX.simpleSetup({channel: 1, ids: ["SimpleSwirl"]});
+					PX.simpleSetup({channel: 1, ids: ["ColorSwirls"]});
 
 
 					// ----------------

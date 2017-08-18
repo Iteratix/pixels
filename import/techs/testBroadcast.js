@@ -1,5 +1,3 @@
-const socket = io('127.0.0.1:9000/chat');
-
 /*
 *
 * Example test structure of a Tech.
