@@ -11,7 +11,7 @@ sio = socketio.Server()
 app = Flask(__name__)
 
 def send_pixel(rgb_tuple):
-    print("sending pixel: {}".format(rgb_tuple))
+    # print("sending pixel: {}".format(rgb_tuple))
     port.dmx_frame[3] = 255 # strobe in combo with ch1
     port.dmx_frame[4] = rgb_tuple[0]
     port.dmx_frame[5] = rgb_tuple[1]
@@ -25,7 +25,7 @@ def connect(sid, environ):
 
 @sio.on('chat message', namespace='/chat')
 def message(sid, data):
-    print("message ", data)
+    # print("message ", data)
     send_pixel(data[0])
 
 @sio.on('disconnect', namespace='/chat')
