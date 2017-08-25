@@ -24,7 +24,7 @@
 		<!-- Import a 'Broadcast Tech' to define how to use the RGB values -->
     <script src="/vendor/socket.io/socket.io.js"></script>
     <script>
-      const socket = io('127.0.0.1:9000/chat');
+      const socket = io(':9000/chat');
     </script>
 		<script src="import/techs/testBroadcast.js"></script>
 
@@ -97,17 +97,17 @@
 					// ----------------
 
 					// Init UI, using dat.gui for now defined in "ui/datguiSetup1.js"
-					initUi();
+					// initUi();
 
 
 					// ----------------
 
 
 					// Display stats
-					stats = new Stats();
-					stats.domElement.style.position = 'absolute';
-					stats.domElement.style.top = '0px';
-					document.getElementById( 'container' ).appendChild( stats.domElement );
+					// stats = new Stats();
+					// stats.domElement.style.position = 'absolute';
+					// stats.domElement.style.top = '0px';
+					// document.getElementById( 'container' ).appendChild( stats.domElement );
 					// ----------------
 
 
@@ -117,7 +117,7 @@
 					params.x = 0;		
 					params.y = 0;
 					params.z = 0;
-					params.width = 8*5;		// How many pixels for the entire grid
+					params.width = 8*1;		// How many pixels for the entire grid
 					params.height = 1;
 					params.pitch = 33;		// How far each pixel is spaced
 
@@ -133,6 +133,7 @@
 
 
 					// ** Load in custom sprite for all nodes (default: id = 0)
+                                        console.log(PX.pointSize);
 
 					PX.hardware.loadCustomPointSprite(0, PX.pointSize, "images/disc.png", function(texture){
 						PX.updateNodePoints();

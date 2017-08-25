@@ -23,13 +23,13 @@ def send_pixels(rgb_tuples):
         else:
             offset = bar_number * 34
         brightness_channel = 33 + offset
-        print('brightness_channel: {}'.format(brightness_channel))
+        # print('brightness_channel: {}'.format(brightness_channel))
         port.dmx_frame[brightness_channel] = 255
         for rgb_tuple in bar_rgb_tuples:
             rgb_tuple.append(0)
-            print(rgb_tuple)
+            #print(rgb_tuple)
         for channel, value in enumerate(sum(bar_rgb_tuples, [])):
-            print("channel: {} value: {}".format(channel+offset, value))
+            # print("channel: {} value: {}".format(channel+offset, value))
             port.dmx_frame[channel+offset] = value
         # port.dmx_frame[33] = randint(0,255)
         # for channel, value in enumerate(sum(rgb_tuples, [])):
