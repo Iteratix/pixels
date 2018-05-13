@@ -5,7 +5,11 @@ build-essential \
 git \
 jq \
 libffi-dev \
-libssl-dev
+libssl-dev \
+python-socketio \
+python-eventlet \
+python-flask \
+python-serial
 # python3-dev \
 # python3-pip
 

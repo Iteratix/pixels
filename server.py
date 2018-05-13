@@ -1,10 +1,9 @@
 from aiohttp import web
 import socketio
 
-
 from pyenttec import DMXConnection
 
-port = DMXConnection('/dev/ttyUSB0')
+port = DMXConnection('/dev/tty.usbserial-6A2I3O5P')
 
 sio = socketio.AsyncServer()
 app = web.Application()

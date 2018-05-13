@@ -117,8 +117,8 @@
 					params.x = 0;		
 					params.y = 0;
 					params.z = 0;
-					params.width = 8*1;		// How many pixels for the entire grid
-					params.height = 1;
+					params.width = 4*1;		// How many pixels for the entire grid
+					params.height = 3;
 					params.pitch = 33;		// How far each pixel is spaced
 
 					PX.hardware.addSimpleNodeGrid(params);
@@ -133,7 +133,7 @@
 
 
 					// ** Load in custom sprite for all nodes (default: id = 0)
-                                        console.log(PX.pointSize);
+          console.log(PX.pointSize);
 
 					PX.hardware.loadCustomPointSprite(0, PX.pointSize, "images/disc.png", function(texture){
 						PX.updateNodePoints();
@@ -144,8 +144,8 @@
 
 
 					// ** Add a shader to Channel 1
-
-					PX.simpleSetup({channel: 1, ids: ["ColorSwirls"]});
+					// HexifyRadial is good
+					PX.simpleSetup({channel: 1, ids: ["HexifyRadial"]});
 
 
 					// ----------------
@@ -172,7 +172,7 @@
 						// ** Capture RGB values
 						// In addition to using Tech's to capture RGB values, we can also access it directly:
 						
-						//console.log(PX.pixels);
+						console.log(PX.pixels);
 
 					}
 

@@ -2,7 +2,7 @@ from pyenttec import DMXConnection
 from random import randint
 from time import sleep
 
-port = DMXConnection('/dev/ttyUSB0')
+port = DMXConnection(u'/dev/tty.usbserial-6A2I3O5P')
 
 # port.dmx_frame[0] = 11
 while True:
