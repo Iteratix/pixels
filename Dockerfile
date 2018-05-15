@@ -1,5 +1,6 @@
 FROM pypy:2
 
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
 RUN apt-get update && apt-get install -y python-setuptools \
 build-essential \
 git \
@@ -7,7 +8,6 @@ jq \
 libffi-dev \
 libssl-dev \
 python-socketio \
-python-eventlet \
 python-flask \
 python-serial
 # python3-dev \

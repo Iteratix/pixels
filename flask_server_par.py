@@ -2,22 +2,22 @@ import socketio
 import eventlet
 import eventlet.wsgi
 from flask import Flask
-import SWHear
-import numpy
+#import SWHear
+#import numpy
 
 from pyenttec import DMXConnection
 sio = socketio.Server()
 app = Flask(__name__)
 
-ear = SWHear.SWHear(rate=44100,updatesPerSecond=20)
-ear.stream_start()
+#ear = SWHear.SWHear(rate=44100,updatesPerSecond=20)
+#ear.stream_start()
 
-d = DMXConnection(u'/dev/tty.usbserial-6A2I3O5P')
+d = DMXConnection(u'/dev/ttyUSB0')
 
 class DMXFrame(object):
-    def __init__(self, dmx, ear):
+    # def __init__(self, dmx, ear):
+    def __init__(self, dmx):
         self.dmx = dmx
-        self.ear = ear
 
     def render(self):
         self.dmx.render()
@@ -28,7 +28,7 @@ class DMXFrame(object):
     #BOBBY PAR
     # 1 func, 2 255 (rgbw), 3 spd, 4 main, 5-8 rgbw
     def set_pixel_a(self, dmx_id, red, green, blue, white):
-        self.dmx.dmx_frame[dmx_id+0] = int(numpy.average(self.ear.fft) % 255)
+        self.dmx.dmx_frame[dmx_id+0] = 255
         self.dmx.dmx_frame[dmx_id+2] = 255
         self.dmx.dmx_frame[dmx_id+3] = red
         self.dmx.dmx_frame[dmx_id+4] = green
@@ -40,7 +40,7 @@ class DMXFrame(object):
     def set_pixel_b(self, dmx_id, red, green, blue, white):
         if dmx_id != 0:
             dmx_id = dmx_id - 1
-        self.dmx.dmx_frame[dmx_id] = int(numpy.average(self.ear.fft) % 255)
+        self.dmx.dmx_frame[dmx_id] = 255
         self.dmx.dmx_frame[dmx_id+1] = 0
         self.dmx.dmx_frame[dmx_id+2] = 0
         self.dmx.dmx_frame[dmx_id+3] = 0
@@ -56,17 +56,18 @@ class DMXFrame(object):
         self.dmx.dmx_frame[dmx_id+1] = green
         self.dmx.dmx_frame[dmx_id+2] = blue
         self.dmx.dmx_frame[dmx_id+3] = amber
-        self.dmx.dmx_frame[dmx_id+9] = int(numpy.average(self.ear.fft) % 255)   
+        self.dmx.dmx_frame[dmx_id+9] = 255
 
     def set_pixel_bar_b(self,dmx_id, red, green, blue, amber):
         self.dmx.dmx_frame[dmx_id+4] = red
         self.dmx.dmx_frame[dmx_id+5] = green
         self.dmx.dmx_frame[dmx_id+6] = blue
         self.dmx.dmx_frame[dmx_id+7] = amber   
-        self.dmx.dmx_frame[dmx_id+9] = int(numpy.average(self.ear.fft) % 255)   
+        self.dmx.dmx_frame[dmx_id+9] = 255
 
 def send_pixel(data):
-    f = DMXFrame(dmx=d, ear=ear)
+    # f = DMXFrame(dmx=d, ear=ear)
+    f = DMXFrame(dmx=d)
 
     for num, rgb_tuple in enumerate(data):
         dmx_id = num * 10

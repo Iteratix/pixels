@@ -196,7 +196,7 @@ class DMXConnection(object):
 
         dmx_payload = (chr(v) for v in self.dmx_frame)
 
-        self.com.write(self._packet_start + ''.join(dmx_payload) + _PACKET_END)
+        self.com.write((self._packet_start + ''.join(dmx_payload) + _PACKET_END))
 
     def set_channel(self, chan, val):
         """Set the value of a DMX channel, indexed from 0.
