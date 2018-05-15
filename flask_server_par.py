@@ -28,6 +28,13 @@ class DMXFrame(object):
     #BOBBY PAR
     # 1 func, 2 255 (rgbw), 3 spd, 4 main, 5-8 rgbw
     def set_pixel_a(self, dmx_id, red, green, blue, white):
+        white = min([red, green, blue])/3
+        amber = min([red - white, green - white])/2
+        red = red - white - amber
+        green = green - white - amber
+        blue = blue - white
+        # for color in [white, amber, red, green, blue]:
+        #     if color >= 255: color = color - (color - 255)
         self.dmx.dmx_frame[dmx_id+0] = 255
         self.dmx.dmx_frame[dmx_id+2] = 255
         self.dmx.dmx_frame[dmx_id+3] = red
@@ -40,6 +47,11 @@ class DMXFrame(object):
     def set_pixel_b(self, dmx_id, red, green, blue, white):
         if dmx_id != 0:
             dmx_id = dmx_id - 1
+        white = min([red, green, blue])/4
+        amber = min([red - white, green - white])/2
+        red = int((red - white - amber) * 0.50)
+        green = int((green - white - amber) * 0.50)
+        blue = int((blue - white) * 0.75)
         self.dmx.dmx_frame[dmx_id] = 255
         self.dmx.dmx_frame[dmx_id+1] = 0
         self.dmx.dmx_frame[dmx_id+2] = 0
@@ -52,6 +64,11 @@ class DMXFrame(object):
     #SET BARS
     #1-3 RGB, 4-6, RGB, 7-9 RGB 10 master
     def set_pixel_bar_a(self,dmx_id, red, green, blue, amber):
+        white = min([red, green, blue])/3
+        amber = min([red - white, green - white])/2
+        red = red - white - amber
+        green = green - white - amber
+        blue = blue - white
         self.dmx.dmx_frame[dmx_id] = red
         self.dmx.dmx_frame[dmx_id+1] = green
         self.dmx.dmx_frame[dmx_id+2] = blue
@@ -59,6 +76,11 @@ class DMXFrame(object):
         self.dmx.dmx_frame[dmx_id+9] = 255
 
     def set_pixel_bar_b(self,dmx_id, red, green, blue, amber):
+        white = min([red, green, blue])/3
+        amber = min([red - white, green - white])/2
+        red = red - white - amber
+        green = green - white - amber
+        blue = blue - white
         self.dmx.dmx_frame[dmx_id+4] = red
         self.dmx.dmx_frame[dmx_id+5] = green
         self.dmx.dmx_frame[dmx_id+6] = blue
