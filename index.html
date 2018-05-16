@@ -43,6 +43,7 @@
 		<script src="import/shaders/Water.js"></script>
 		<script src="import/shaders/HexifyRadial.js"></script>
 		<script src="import/shaders/RainbowWash.js"></script>
+		<script src="import/shaders/BullShit.js"></script>
 		<script src="import/shaders/SinCosTan.js"></script>
 		<script src="import/shaders/HueFx.js"></script>
 		<script src="import/shaders/TestFx.js"></script>
@@ -118,8 +119,8 @@
 					params.x = 0;		
 					params.y = 0;
 					params.z = 0;
-					params.width = 4*1;		// How many pixels for the entire grid
-					params.height = 3;
+					params.width = 10;		// How many pixels for the entire grid
+					params.height = 1;
 					params.pitch = 33;		// How far each pixel is spaced
 
 					PX.hardware.addSimpleNodeGrid(params);
@@ -146,7 +147,10 @@
 
 					// ** Add a shader to Channel 1
 					// HexifyRadial is good
-					PX.simpleSetup({channel: 1, ids: ["RainbowWash"]});
+					PX.simpleSetup({channel: 1, ids: ["RainbowWash", "BullShit"]});
+					PX.set("speed", 0.25, 1, 1, 1);
+					PX.set("mix", 0.8, 1, 1, 1);
+					PX.set("blend", PX.BLEND.Difference, 1, 1, 1);
 
 
 					// ----------------
