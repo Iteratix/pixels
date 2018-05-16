@@ -42,6 +42,7 @@
 		<script src="import/shaders/SineParticles.js"></script>
 		<script src="import/shaders/Water.js"></script>
 		<script src="import/shaders/HexifyRadial.js"></script>
+		<script src="import/shaders/RainbowWash.js"></script>
 		<script src="import/shaders/SinCosTan.js"></script>
 		<script src="import/shaders/HueFx.js"></script>
 		<script src="import/shaders/TestFx.js"></script>
@@ -145,7 +146,7 @@
 
 					// ** Add a shader to Channel 1
 					// HexifyRadial is good
-					PX.simpleSetup({channel: 1, ids: ["DiSinSwirl"]});
+					PX.simpleSetup({channel: 1, ids: ["RainbowWash"]});
 
 
 					// ----------------
@@ -172,7 +173,7 @@
 						// ** Capture RGB values
 						// In addition to using Tech's to capture RGB values, we can also access it directly:
 						
-						console.log(PX.pixels);
+						//console.log(PX.pixels);
 
 					}
 

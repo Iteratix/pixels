@@ -29,9 +29,8 @@ class DMXFrame(object):
     # 1 func, 2 255 (rgbw), 3 spd, 4 main, 5-8 rgbw
     def set_pixel_a(self, dmx_id, red, green, blue, white):
         white = min([red, green, blue])/3
-        amber = min([red - white, green - white])/2
-        red = red - white - amber
-        green = green - white - amber
+        red = red - white
+        green = green - white
         blue = blue - white
         # for color in [white, amber, red, green, blue]:
         #     if color >= 255: color = color - (color - 255)
@@ -48,10 +47,10 @@ class DMXFrame(object):
         if dmx_id != 0:
             dmx_id = dmx_id - 1
         white = min([red, green, blue])/4
-        amber = min([red - white, green - white])/2
-        red = int((red - white - amber) * 0.50)
-        green = int((green - white - amber) * 0.50)
-        blue = int((blue - white) * 0.75)
+        # amber = min([red - white, green - white])/2
+        red = int((red - white) * 0.50)
+        green = int((green - white) * 0.50)
+        blue = int((blue - white) * 0.50)
         self.dmx.dmx_frame[dmx_id] = 255
         self.dmx.dmx_frame[dmx_id+1] = 0
         self.dmx.dmx_frame[dmx_id+2] = 0
