@@ -5,14 +5,17 @@ from flask import Flask
 #import SWHear
 #import numpy
 
-from pyenttec import DMXConnection
+import pyenttec as dmx
 sio = socketio.Server()
 app = Flask(__name__)
 
 #ear = SWHear.SWHear(rate=44100,updatesPerSecond=20)
 #ear.stream_start()
 
-d = DMXConnection(u'/dev/ttyUSB0')
+try:
+    d = dmx.DMXConnection(u'/dev/ttyUSB0')
+except:
+    d = dmx.select_port()
 
 class DMXFrame(object):
     # def __init__(self, dmx, ear):
@@ -95,14 +98,13 @@ def send_pixel(data):
 
         #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
         
-        if num < 4:
-            f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
-        if num > 3 and num < 8:
+
+        if num > 0 and num < 12:
             f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
-        if num == 8:
+        if num >= 20 and num <=23:
             f.set_pixel_bar_a(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
             f.set_pixel_bar_b(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-        if num == 9:
+        if num >= 24:
             f.set_pixel_bar_a(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
             f.set_pixel_bar_b(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
 
