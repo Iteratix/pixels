@@ -119,8 +119,8 @@
 					params.x = 0;		
 					params.y = 0;
 					params.z = 0;
-					params.width = 5;		// How many pixels for the entire grid
-					params.height = 5;
+					params.width = 6;		// How many pixels for the entire grid
+					params.height = 6;
 					params.pitch = 33;		// How far each pixel is spaced
 
 					PX.hardware.addSimpleNodeGrid(params);
@@ -147,9 +147,9 @@
 
 					// ** Add a shader to Channel 1
 					// HexifyRadial is good
-					PX.simpleSetup({channel: 1, ids: ["SinCosTan", "Water"]});
-					PX.set("speed", 0.8, 1, 1, 1);
-					PX.set("mix", .95, 1, 1, 1);
+					PX.simpleSetup({channel: 1, ids: ["RainbowWash"]});
+					PX.set("speed", .5, 1, 1, 1);
+					PX.set("mix", 1, 1, 1, 1);
 					PX.set("blend", PX.BLEND.Darken, 1,1 , 1);
 
 

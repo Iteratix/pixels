@@ -92,7 +92,7 @@ class DMXFrame(object):
 def send_pixel(data):
     # f = DMXFrame(dmx=d, ear=ear)
     f = DMXFrame(dmx=d)
-
+    
     for num, rgb_tuple in enumerate(data):
         dmx_id = num * 10
 
@@ -100,14 +100,15 @@ def send_pixel(data):
         
 
         if num > 0 and num < 12:
-            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
+            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 50)
+        if num > 12 and num < 20:
+            f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 50)
         if num >= 20 and num <=23:
             f.set_pixel_bar_a(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
             f.set_pixel_bar_b(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-        if num >= 24:
+        if num >= 24 and num <=27:
             f.set_pixel_bar_a(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
             f.set_pixel_bar_b(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-
         #f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(40,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(50,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
