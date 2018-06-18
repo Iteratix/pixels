@@ -18,7 +18,6 @@ except:
     d = dmx.select_port()
 
 class DMXFrame(object):
-    # def __init__(self, dmx, ear):
     def __init__(self, dmx):
         self.dmx = dmx
 
@@ -28,9 +27,30 @@ class DMXFrame(object):
     def blackout(self):
         self.dmx.blackout()
 
-    #BOBBY PAR
+    #BOBBY PAR VERSION 2
+    # 1 main dim, 2,3,4,5 rgbw, 6 strobe, 7 modes, 8 speed
+    def set_pixel_aa(self, dmx_id, red, green, blue):
+        #dmx offset for these
+        dmx_id = dmx_id - 1
+
+        white = min([red, green, blue])/3
+        red = red - white
+        green = green - white
+        blue = blue - white
+
+        self.dmx.dmx_frame[dmx_id+0] = 255
+        self.dmx.dmx_frame[dmx_id+1] = red
+        self.dmx.dmx_frame[dmx_id+2] = green
+        self.dmx.dmx_frame[dmx_id+3] = blue
+        self.dmx.dmx_frame[dmx_id+4] = white
+        self.dmx.dmx_frame[dmx_id+5] = 0
+        self.dmx.dmx_frame[dmx_id+6] = 0
+        self.dmx.dmx_frame[dmx_id+7] = 0
+        self.dmx.dmx_frame[dmx_id+8] = 0
+
+    #BOBBY PAR, 
     # 1 func, 2 255 (rgbw), 3 spd, 4 main, 5-8 rgbw
-    def set_pixel_a(self, dmx_id, red, green, blue, white):
+    def set_pixel_a(self, dmx_id, red, green, blue):
         white = min([red, green, blue])/3
         red = red - white
         green = green - white
@@ -43,6 +63,7 @@ class DMXFrame(object):
         self.dmx.dmx_frame[dmx_id+4] = green
         self.dmx.dmx_frame[dmx_id+5] = blue
         self.dmx.dmx_frame[dmx_id+6] = white
+
 
     #CLAY PAR
     # :dimmer, :strobe, :control, :speed, :red, :green, :blue, :white
@@ -96,19 +117,17 @@ def send_pixel(data):
     for num, rgb_tuple in enumerate(data):
         dmx_id = num * 10
 
-        #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
         
 
-        if num > 0 and num < 12:
-            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 50)
-        if num > 12 and num < 20:
-            f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 50)
-        if num >= 20 and num <=23:
-            f.set_pixel_bar_a(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-            f.set_pixel_bar_b(199,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-        if num >= 24 and num <=27:
-            f.set_pixel_bar_a(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
-            f.set_pixel_bar_b(249,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2],100)
+        if num > 0 and num < 30:
+            #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
+
+            f.set_pixel_aa(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+
+        if num >= 30 and num < 40:
+            #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
+
+            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
         #f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(40,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(50,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
