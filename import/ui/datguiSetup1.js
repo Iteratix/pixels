@@ -58,7 +58,7 @@ function initUi(){
 	// =========Event listeners===============
 
 
-	gui.add( guiData, "Channel1Mix", 0.0, 1.0, 1.0 )  .onChange(function (v) { PX.set("mix", v, 1);  });
+	gui.add( guiData, "Channel1Mix", 0.0, 1.0, 1.0 )  .onChange(function (v) { PX.set("mix", v, 1, 1, 1);  });
 
 	gui.add( { SnapToFront:function(){
 		controls.reset();
@@ -87,7 +87,7 @@ function initUi(){
 	f3.add( guiData, "S1HueTint", 0.0, 1.0, 1.0 )  .onChange(function (v) { PX.set("p1", v, 1, 1, 2);  });
 
 	// Post Fx
-	f4.add( guiData, "Hue", 0.0, 1.0, 1.0 )    .onChange(function (v) { PX.set("p1", v, 2, 1, 1);  });
+	f4.add( guiData, "Hue", 0.01, 1.0, 1.0 )    .onChange(function (v) { PX.set("p1", v, 2, 1, 1);  });
 	f4.add( guiData, "HueClamp", 0.0, 1.0, 1.0 )   .onChange(function (v) { PX.set("p2", v, 2, 1, 1);  });
 	f4.add( guiData, "Saturation", 0.0, 1.0, 1.0 ) .onChange(function (v) { PX.set("p3", v, 2, 1, 1);  });
 	f4.add( guiData, "SatClamp", 0.0, 1.0, 1.0 )   .onChange(function (v) { PX.set("p4", v, 2, 1, 1);  });
@@ -133,7 +133,7 @@ function initUi(){
 		PX.updateShader();
 
 	});
-	f5.add( guiData, "Speed", 0.025, 0.4, 1.0 ).onChange(function (v) { PX.speed = v; });
+	f5.add( guiData, "Speed", 0.001, 0.4, 1.0 ).onChange(function (v) { PX.speed = v; });
 	//f5.add( guiData, "PointSize", 45.0, 90.0, 1.0 ).onChange(function (v) { PX.pointMaterial.uniforms.u_pointSize.value = v;  });
 
 

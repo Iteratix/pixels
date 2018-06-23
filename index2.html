@@ -1,36 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Read Pixels Example</title>
+		<title>PixelMixer Demo</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link href="css/main.css" rel="stylesheet" />
-		
 
-		<!-- Import standard three.js stuff -->
+		<script src="libs/pixelmixer.min.js"></script>
 		<script src="libs/Detector.js"></script>
 		<script src="libs/stats.min.js"></script>
 		<script src="libs/dat.gui.min.js"></script>
 		<script src="libs/three.min.js"></script>
 		<script src="libs/TrackballControls.js"></script>
 
-		<!-- Import library -->
-		<script src="libs/pixelmixer.min.js"></script>
-
-		<script src="import/ui/datGuiPresets.js"></script>
-		<script src="import/ui/datguiSetup1.js"></script>
-		<script src="import/ui/utils.js"></script>
-
-		<!-- Import a 'Broadcast Tech' to define how to use the RGB values -->
-    <script src="/vendor/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io(':9000/chat');
-    </script>
-		<script src="import/techs/testBroadcast.js"></script>
-
-
-
-		<!-- Import Shaders -->
 		<script src="import/shaders/SolidColor.js"></script>
 		<script src="import/shaders/TestFrame.js"></script>
 		<script src="import/shaders/DiSinSwirl.js"></script>
@@ -42,16 +24,20 @@
 		<script src="import/shaders/SineParticles.js"></script>
 		<script src="import/shaders/Water.js"></script>
 		<script src="import/shaders/HexifyRadial.js"></script>
-		<script src="import/shaders/RainbowWash.js"></script>
-		<script src="import/shaders/BullShit.js"></script>
 		<script src="import/shaders/SinCosTan.js"></script>
 		<script src="import/shaders/HueFx.js"></script>
 		<script src="import/shaders/TestFx.js"></script>
 		<script src="import/shaders/BasicTest.js"></script>
-		<script src="import/shaders/MovingRainbow.js"></script>
+		<script src="import/shaders/RainbowWash.js"></script>
+
+		<script src="import/ui/datGuiPresets.js"></script>
+		<script src="import/ui/datguiSetup1.js"></script>
+		<script src="import/ui/utils.js"></script>
 		<script src="import/techs/testBroadcast.js"></script>
-
-
+		<script src="vendor/socket.io/socket.io.js"></script>
+		<script>
+			const socket = io(':9000/chat');
+		</script>
 
 		<script>
 
@@ -64,19 +50,16 @@
 				var renderer;
 				var camera;
 				var controls;
+
 				var container;
+				var stats;
 
 				function onLoad(){
 
-
-					// ----------------
-
-
-					// ** Standard Three.js setup
-
+					// Three.js setup
 					scene = new THREE.Scene();
 
-					renderer = new THREE.WebGLRenderer(); 
+					renderer = new THREE.WebGLRenderer( /*{ preserveDrawingBuffer: readPixels } */); // Some browsers might need preserveDrawingBuffer to readPixels
 					renderer.setSize( glWidth, glHeight );
 					renderer.autoClear = false;
 
@@ -84,27 +67,29 @@
 					container.appendChild( renderer.domElement ); 
 
 					camera = new THREE.PerspectiveCamera( 30, glWidth / glHeight, 1, 100000 );
-					camera.position.z = 1000;
+					camera.position.z = 2000;
 					controls = new THREE.TrackballControls( camera, renderer.domElement);
 
 
-					// ----------------
+					// // Initialize ap
+					// var maxNodeCount = 10000;
+					// PX.nodeSprite = "images/nodeflare250.png";
+					// PX.init(scene, renderer, maxNodeCount);
+					// PX.pointSize = 10;
+					// PX.setSize(glWidth, glHeight);
+					// //PX.dataSetLength = 1024; // use this to pass audio data (or any data feed)
+
+					
+
+					// // Specify defaults starting hardware
+					// PX.hardware.importNodes(PX.imported, 1, 350, 100, 500);
+					// PX.channels.setPodPos(2, new PX.PodPosition(-190, 140, -100, 1070, 575, 1000));
+					// PX.updateNodePoints();
 
 
-					// ** Initialize PixelMixer
-
-					PX.init(scene, renderer, { broadcast: true, readPixels: true });
-					PX.setSize(glWidth, glHeight);
-					PX.setPointPosition(-100, 0, 0);
-
-
-					// ----------------
 
 					// Init UI, using dat.gui for now defined in "ui/datguiSetup1.js"
 					initUi();
-
-
-					// ----------------
 
 
 					// Display stats
@@ -112,86 +97,78 @@
 					stats.domElement.style.position = 'absolute';
 					stats.domElement.style.top = '0px';
 					document.getElementById( 'container' ).appendChild( stats.domElement );
-					// ----------------
+
+					PX.init(scene, renderer, { broadcast: true, readPixels: true });
+					PX.setSize(glWidth, glHeight);
+					PX.setPointPosition(-100, 0, 0);
 
 
-					// ** Add a simple grid of Nodes 
+					// Add a simple grid of nodes
 
-					var params = {};		// Position coordinates for the entire grid
-					params.x = 0;		
+					var params = {};
+					params.port = 0;
+					params.x = 0;
 					params.y = -100;
 					params.z = 0;
-					params.width = 6;		// How many pixels for the entire grid
+					params.width = 6;
 					params.height = 6;
-					params.pitch = 50;		// How far each pixel is spaced
+					params.pitch = 50;
 
 					PX.hardware.addSimpleNodeGrid(params);
-					PX.updateNodePoints();
 
-
-					// This tells the 'testBroadcast' tech to broadcast the color values of the port we just created
 					PX.ports.getPort(1).type = "testBroadcast";
 					PX.ports.getPort(1).broadcast = true;
-
-
-					// ----------------
-
-
-					// ** Load in custom sprite for all nodes (default: id = 0)
-          console.log(PX.pointSize);
 
 					PX.hardware.loadCustomPointSprite(0, PX.pointSize, "images/disc.png", function(texture){
 						PX.updateNodePoints();
 					});
-					
-
-					// ----------------
 
 
-					// ** Add a shader to Channel 1
-					// HexifyRadial is good
-					PX.simpleSetup({channel: 1, ids: ["RainbowWash"]});
-					PX.set("speed", .5, 1, 1, 1);
-					PX.set("mix", 1, 1, 1, 1);
+					// ** Setup some Clips in Pods in Channel
+					var clip1 = new PX.Clip({id: "Water"});
+					var clipfx1 = new PX.Clip({id: "TestFx", blend: PX.BLEND.Fx});
+					var clip2 = new PX.Clip({id: "Water"});
+					var clipfx2 = new PX.Clip({id: "TestFx", blend: PX.BLEND.Fx});
+					// Create two pods each with a content clip and a fx clip inside it
+					var pods = [];
+					pods[1] = new PX.Pod({positionIds: [1], blend: PX.BLEND.Screen, clips: [clip1, clipfx1]});
+					pods[0] = new PX.Pod({positionIds: [1], clips: [clip2, clipfx2]});
+					// Add them both to the first channel
+					var channel1 = new PX.Channel({name: "TestChannel1", mix: 1, pods: pods});
+					PX.channels.setChannel(1, channel1);
 
-					PX.set("blend", PX.BLEND.Difference, 1,1,1);
+					// ** Channel 2 - Post FX Channel
+				
+					var pods2 = [];
+					var clipfx3 = new PX.Clip({id: "HueFx", blend: PX.BLEND.Fx});
+					pods2[0] = new PX.Pod({positionIds: [1], clips: [clipfx3]});
+					var channel2 = new PX.Channel({name: "Post FX1", type: PX.CHANNEL_TYPE_FX, mix: 1, pods: pods2});
+					PX.channels.setChannel(2, channel2);
 
 
-					// ----------------
-
-
-					// ** Start the main loop
-
+					// Start the main loop
 					animate();
-
-
+					
 				}
 
 				function animate() {
 
 					// Main update loop
-
 					if(PX.ready){
 						stats.update();
 						PX.update();
 						controls.update();
 						renderer.render( scene, camera );
-
-
-						// ** Capture RGB values
-						// In addition to using Tech's to capture RGB values, we can also access it directly:
-						
-						console.log(PX.pixels);
-
+						//console.log(PX.pixels);
 					}
 
 					requestAnimationFrame( animate );
 				}
 
 
+				// Resize logic
 				function onWindowResize() {
 
-					// Resize logic
 					glWidth = window.innerWidth;
 					glHeight = window.innerHeight;
 
@@ -202,6 +179,7 @@
 					controls.handleResize();
 
 				}
+
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}

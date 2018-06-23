@@ -33,7 +33,7 @@ class DMXFrame(object):
         #dmx offset for these
         dmx_id = dmx_id - 1
 
-        white = min([red, green, blue])/3
+        white = int(min([red, green, blue])*0.4)
         red = red - white
         green = green - white
         blue = blue - white
@@ -51,7 +51,7 @@ class DMXFrame(object):
     #BOBBY PAR, 
     # 1 func, 2 255 (rgbw), 3 spd, 4 main, 5-8 rgbw
     def set_pixel_a(self, dmx_id, red, green, blue):
-        white = min([red, green, blue])/3
+        white = int(min([red, green, blue])*0.4)
         red = red - white
         green = green - white
         blue = blue - white
