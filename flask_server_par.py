@@ -27,6 +27,26 @@ class DMXFrame(object):
     def blackout(self):
         self.dmx.blackout()
 
+
+    #Betopper
+    def set_pixel_washbar(self, dmx_id, red, green, blue):
+        dmx_id = dmx_id -1
+
+        white = int(min([red, green, blue])*0.4)
+        red = red - white
+        green = green - white
+        blue = blue - white
+
+        self.dmx.dmx_frame[dmx_id] = 255 #shutter
+        self.dmx.dmx_frame[dmx_id+1] = red #red?
+        self.dmx.dmx_frame[dmx_id+2] = green #green
+        self.dmx.dmx_frame[dmx_id+3] =  blue #blue
+        self.dmx.dmx_frame[dmx_id+4] = 0 # uv
+        self.dmx.dmx_frame[dmx_id+5] = 0 # func
+        self.dmx.dmx_frame[dmx_id+6] = 0 # func2
+        self.dmx.dmx_frame[dmx_id+7] = 0 # speed
+
+
     #Betopper
     def set_pixel_betopper(self, dmx_id, red, green, blue):
         dmx_id = dmx_id -1
@@ -148,17 +168,33 @@ class DMXFrame(object):
         self.dmx.dmx_frame[dmx_id+9] = 255
 
 def send_pixel(data):
-    # f = DMXFrame(dmx=d, ear=ear)
     f = DMXFrame(dmx=d)
     
     for num, rgb_tuple in enumerate(data):
         dmx_id = num * 10
-
+        #print(num, rgb_tuple)
         
-        if num > 0 and num < 20:
-            print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
-
+        if num > 0 and num < 10:
+            print("setting betopper: {} {}".format(dmx_id, rgb_tuple))
             f.set_pixel_betopper(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+
+        if num >= 10 and num < 20:
+            print("setting jlpow: {} {}".format(dmx_id, rgb_tuple))
+            f.set_pixel_jlpow(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+
+        if num >= 20 and num < 30:
+            print("setting wash: {} {}".format(dmx_id, rgb_tuple))
+            f.set_pixel_washbar(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+        
+        if num >= 30 and num < 40:
+            print("setting typea: {} {}".format(dmx_id, rgb_tuple))
+            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+
+        if num >= 40 and num < 50:
+            print("setting typeb: {} {}".format(dmx_id, rgb_tuple))
+            f.set_pixel_aa(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+
+
 
         # if num >= 30 and num < 40:
         #     print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
