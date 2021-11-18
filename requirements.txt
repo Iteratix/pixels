@@ -2,3 +2,6 @@ eventlet
 Flask
 python-socketio
 pyserial
+pyenttec
+launchpad_py
+pygame
