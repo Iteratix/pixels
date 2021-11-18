@@ -1,9 +1,9 @@
 from aiohttp import web
 import socketio
 
-from pyenttec import DMXConnection
+#from pyenttec import DMXConnection
 
-port = DMXConnection('/dev/tty.usbserial-6A2I3O5P')
+#port = DMXConnection('/dev/tty.usbserial-6A2I3O5P')
 
 sio = socketio.AsyncServer()
 app = web.Application()
@@ -16,12 +16,12 @@ async def index(request):
 
 async def send_pixel(rgb_tuple):
     print("sending pixel: {}".format(rgb_tuple))
-    port.dmx_frame[3] = 255 # strobe in combo with ch1
-    port.dmx_frame[4] = 0
-    port.dmx_frame[5] = rgb_tuple[0]
-    port.dmx_frame[6] = rgb_tuple[1]
-    port.dmx_frame[7] = rgb_tuple[2]
-    port.render()
+    # port.dmx_frame[3] = 255 # strobe in combo with ch1
+    # port.dmx_frame[4] = 0
+    # port.dmx_frame[5] = rgb_tuple[0]
+    # port.dmx_frame[6] = rgb_tuple[1]
+    # port.dmx_frame[7] = rgb_tuple[2]
+    # port.render()
 
 @sio.on('connect', namespace='/chat')
 def connect(sid, environ):

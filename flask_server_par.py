@@ -6,7 +6,7 @@ from flask import Flask
 #import numpy
 
 import pyenttec as dmx
-sio = socketio.Server()
+sio = socketio.Server(cors_allowed_origins="*")
 app = Flask(__name__)
 
 #ear = SWHear.SWHear(rate=44100,updatesPerSecond=20)
@@ -26,6 +26,43 @@ class DMXFrame(object):
 
     def blackout(self):
         self.dmx.blackout()
+
+    #Betopper
+    def set_pixel_betopper(self, dmx_id, red, green, blue):
+        dmx_id = dmx_id -1
+
+        white = int(min([red, green, blue])*0.4)
+        red = red - white
+        green = green - white
+        blue = blue - white
+
+        self.dmx.dmx_frame[dmx_id] = 255 #shutter
+        self.dmx.dmx_frame[dmx_id+1] = 0 #strobe?
+        self.dmx.dmx_frame[dmx_id+2] = 0 #green
+        self.dmx.dmx_frame[dmx_id+3] =  0 #blue
+        self.dmx.dmx_frame[dmx_id+4] = red # red
+        self.dmx.dmx_frame[dmx_id+5] = green# green
+        self.dmx.dmx_frame[dmx_id+6] = blue # blue
+        self.dmx.dmx_frame[dmx_id+7] = 0 #
+
+
+    #JLPOW
+    def set_pixel_jlpow(self, dmx_id, red, green, blue):
+        dmx_id = dmx_id - 1
+
+        white = int(min([red, green, blue])*0.4)
+        red = red - white
+        green = green - white
+        blue = blue - white
+
+        self.dmx.dmx_frame[dmx_id+0] = 0
+        self.dmx.dmx_frame[dmx_id+1] = 255
+        self.dmx.dmx_frame[dmx_id+2] = 0
+        self.dmx.dmx_frame[dmx_id+3] = 255
+        self.dmx.dmx_frame[dmx_id+4] = red
+        self.dmx.dmx_frame[dmx_id+5] = green
+        self.dmx.dmx_frame[dmx_id+6] = blue
+
 
     #BOBBY PAR VERSION 2
     # 1 main dim, 2,3,4,5 rgbw, 6 strobe, 7 modes, 8 speed
@@ -118,28 +155,27 @@ def send_pixel(data):
         dmx_id = num * 10
 
         
+        if num > 0 and num < 20:
+            print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
 
-        if num > 0 and num < 30:
-            #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
+            f.set_pixel_betopper(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
 
-            f.set_pixel_aa(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+        # if num >= 30 and num < 40:
+        #     print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
 
-        if num >= 30 and num < 40:
-            #print("setting pixel: {} {}".format(dmx_id, rgb_tuple))
-
-            f.set_pixel_a(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
+        #     f.set_pixel_aa(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2])
         #f.set_pixel_b(dmx_id,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(40,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(50,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(60,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     # f.set_pixel_a(70,rgb_tuple[0],rgb_tuple[1],rgb_tuple[2], 0)
     f.render()
-    # port.dmx_frame[42] = 255 # strobe in combo with ch1
-    # port.dmx_frame[43] = rgb_tuple[0]
-    # port.dmx_frame[44] = rgb_tuple[1]
-    # port.dmx_frame[45] = rgb_tuple[2]
-    # port.dmx_frame[46] = 0 #rgb_tuple[2]
-    #port.render()
+    # self.dmx.dmx_frame[42] = 255 # strobe in combo with ch1
+    # self.dmx.dmx_frame[43] = rgb_tuple[0]
+    # self.dmx.dmx_frame[44] = rgb_tuple[1]
+    # self.dmx.dmx_frame[45] = rgb_tuple[2]
+    # self.dmx.dmx_frame[46] = 0 #rgb_tuple[2]
+    #self.dmx.render()
 
 @sio.on('connect', namespace='/chat')
 def connect(sid, environ):

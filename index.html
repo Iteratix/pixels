@@ -24,7 +24,9 @@
 		<!-- Import a 'Broadcast Tech' to define how to use the RGB values -->
     <script src="/vendor/socket.io/socket.io.js"></script>
     <script>
+
       const socket = io(':9000/chat');
+
     </script>
 		<script src="import/techs/testBroadcast.js"></script>
 
@@ -121,9 +123,9 @@
 					params.x = 0;		
 					params.y = -100;
 					params.z = 0;
-					params.width = 6;		// How many pixels for the entire grid
-					params.height = 6;
-					params.pitch = 50;		// How far each pixel is spaced
+					params.width = 20;		// How many pixels for the entire grid
+					params.height = 20;
+					params.pitch = 20;		// How far each pixel is spaced
 
 					PX.hardware.addSimpleNodeGrid(params);
 					PX.updateNodePoints();
@@ -151,7 +153,7 @@
 					// ** Add a shader to Channel 1
 					// HexifyRadial is good
 					PX.simpleSetup({channel: 1, ids: ["RainbowWash"]});
-					PX.set("speed", .5, 1, 1, 1);
+					PX.set("speed", 1, 1, 1, 1);
 					PX.set("mix", 1, 1, 1, 1);
 
 					PX.set("blend", PX.BLEND.Difference, 1,1,1);
@@ -181,7 +183,7 @@
 						// ** Capture RGB values
 						// In addition to using Tech's to capture RGB values, we can also access it directly:
 						
-						console.log(PX.pixels);
+						//console.log(PX.pixels);
 
 					}
 
